@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 require 'rubygems'
 require 'mechanize'
+require 'dotenv'
+
 class RutrackerApi
 
+  Dotenv.load
   attr_accessor :agent
 
   LOGIN_PAGE = 'http://login.rutracker.org/forum/login.php'
@@ -27,31 +30,23 @@ class RutrackerApi
     query = prepare_query_string options
     @agent.get query
     parse_search
-    # if /(\+|\-)?\w{3,}(\*|\s)?/ === term && !(/&/ === term)
-    #   request = 'http://rutracker.org/forum/tracker.php?nm=' + term
-    # else
-    #   raise "Wrong search term"
-    # end
-    # options[:category].split(',').each { |cid| request << '&f[]=' << cid } if options.has_key? :category
- end
   end
 
   def find_user(nick)
+    # TODO: add parser for user pages
     @agent.get 'http://rutracker.org/forum/profile.php?mode=viewprofile&u=' + nick
   end
 
   private
     def login
-      @agent.post(LOGIN_PAGE, login_username: 'username',
-                  login_password: 'pass', login: 'Вход')
-      # @agent.post(LOGIN_PAGE, login_username: ENV["RUTRACKER_LOGIN"],
-      #             login_password: ENV["RUTRACKER_PASS"], login: 'Вход')
+      @agent.post(LOGIN_PAGE, login_username: ENV["RUTRACKER_LOGIN"],
+                  login_password: ENV["RUTRACKER_PASS"], login: 'Вход')
     end
 
     def prepare_query_string(options)
       prepared = { f: options[:category], nm: options[:term],
         s: SORT_OPTIONS[options[:sort]], o: ORDER_OPTIONS[options[:order_by]] }
-      
+
       query = SEARCH_PAGE + '?'
       if prepared[:nm]
         query.gsub! '&', ''
@@ -81,4 +76,3 @@ class RutrackerApi
     end
   end
 end
-
