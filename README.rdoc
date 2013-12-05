@@ -19,5 +19,7 @@ You need to install ENV variables for login to http://rutracker.org
   ENV["RUTRACKER_PASS"] = "pass"
 
 In code:
+  # create client for parsing
   client = RutrackerApi.new
-  
+  #create request ro rutracker
+  result = client.search(category: 7, sort: 'ack', order_by: 'date', term: 'Superman')
