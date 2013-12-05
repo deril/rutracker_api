@@ -1,2 +1,23 @@
-rutracker-parser
-================
+rutracker_api
+
+== Description
+
+Rutracker Api is usefull gem if you need to parse some seeds on Rutracker.org
+
+== Usage
+
+  $ gem install rutracker_api
+or if you want to use with bundler
+
+in Gemfile
+  gem 'rutracker_api'
+than
+  $ bundle install
+
+You need to install ENV variables for login to http://rutracker.org
+  ENV["RUTRACKER_LOGIN"] = "login"
+  ENV["RUTRACKER_PASS"] = "pass"
+
+In code:
+  client = RutrackerApi.new
+  
