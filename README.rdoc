@@ -1,4 +1,4 @@
-rutracker_api
+= \Rutracker Api - gem for easy parsing rutracker
 
 == Description
 
