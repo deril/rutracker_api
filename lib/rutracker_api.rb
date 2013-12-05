@@ -60,6 +60,9 @@ class RutrackerApi
 
     def parse_search
     @agent.page.search("//table[@class='forumline tablesorter']/tbody/tr").map do |row|
+      if row.css(".row1").text =~ /Не найдено/
+        return {error: 'Not found'}
+      end
       description = row.at("td[4]").text.strip
       torrent_id =  row.at("td[4]//a").attributes['data-topic_id'].text.to_i
       size = row.at("td[6]/a").text.chomp(" ↓")
