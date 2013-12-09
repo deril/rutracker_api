@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 require 'rubygems'
 require 'mechanize'
-require 'dotenv'
 
 class RutrackerApi
-
-  Dotenv.load
   attr_accessor :agent
 
   LOGIN_PAGE = 'http://login.rutracker.org/forum/login.php'
@@ -16,10 +13,10 @@ class RutrackerApi
                     speed_down: 13, message_count: 5, last_seed: 9 }
   SORT_OPTIONS = {asc: 1, desc: 2}
 
-  def initialize
+  def initialize(username, pass)
     @agent = Mechanize.new
     @agent.user_agent_alias = 'Mac Safari'
-    login
+    login(username, pass)
   end
 
   # Advance search throw rutracker
@@ -38,9 +35,9 @@ class RutrackerApi
   end
 
   private
-    def login
-      @agent.post(LOGIN_PAGE, login_username: ENV["RUTRACKER_LOGIN"],
-                  login_password: ENV["RUTRACKER_PASS"], login: 'Вход')
+    def login(username, pass)
+      @agent.post(LOGIN_PAGE, login_username: username,
+                  login_password: pass, login: 'Вход')
     end
 
     def prepare_query_string(options)

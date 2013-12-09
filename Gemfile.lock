@@ -4,9 +4,6 @@ GEM
     diff-lcs (1.2.4)
     domain_name (0.5.14)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (0.9.0)
-    dotenv-rails (0.9.0)
-      dotenv (= 0.9.0)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     mechanize (2.7.2)
@@ -42,6 +39,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  dotenv-rails
   mechanize
   rspec

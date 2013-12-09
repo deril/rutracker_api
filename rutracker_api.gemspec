@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.require_paths    = ['lib']
 
   s.add_dependency 'mechanize', ['>=2.7.2']
-  s.add_dependency 'dotenv-rails', ['>=0.9.0']
 
   s.add_development_dependency 'bundler', ['>= 1.0.0']
   s.add_development_dependency 'rake', ['>= 0']
