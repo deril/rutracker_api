@@ -14,12 +14,9 @@ in Gemfile
 than
   $ bundle install
 
-You need to install ENV variables for login to http://rutracker.org
-  ENV["RUTRACKER_LOGIN"] = "login"
-  ENV["RUTRACKER_PASS"] = "pass"
-
+You have to have registration on http://rutracker.org
 In code:
-  # create client for parsing
-  client = RutrackerApi.new
+  # create client for parsing. Put there login and password from your account
+  client = RutrackerApi.new('my_login', 'my_pass')
   #create request ro rutracker
   result = client.search(category: 7, sort: 'ack', order_by: 'date', term: 'Superman')
