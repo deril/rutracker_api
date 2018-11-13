@@ -27,7 +27,7 @@ In code:
 
   ```ruby
 # create client for parsing. Put there login and password from your account
-client = RutrackerApi.new('my_login', 'my_pass')
+client = RutrackerApi::Client.new('my_login', 'my_pass')
 
 #create request ro rutracker
 client.search(category: 7, sort: :ask, order_by: :date, term: 'Superman')
