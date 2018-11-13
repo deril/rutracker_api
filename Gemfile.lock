@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     rutracker_api (0.1.0)
-      mechanize (>= 2.7.6)
+      mechanize (~> 2.7)
 
 GEM
   remote: https://rubygems.org/
