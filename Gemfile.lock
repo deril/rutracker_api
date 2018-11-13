@@ -1,3 +1,9 @@
+PATH
+  remote: .
+  specs:
+    rutracker_api (0.1.0)
+      mechanize (>= 2.7.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -26,6 +32,7 @@ GEM
     nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     ntlm-http (0.1.1)
+    rake (10.5.0)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -48,8 +55,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  mechanize
-  rspec
+  bundler (~> 1.17)
+  rake (~> 10.0)
+  rspec (~> 3.0)
+  rutracker_api!
 
 BUNDLED WITH
    1.17.1

@@ -1,23 +1,36 @@
-Gem::Specification.new do |s|
-  s.name             = 'rutracker_api'
-  s.version          = '0.0.2'
-  s.summary          = "API for rutracker.org"
-  s.description      = "Provide simple api for rutracker.org"
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'rutracker_api/version'
 
-  s.authors          = ['Dmytro Bignyak']
-  s.email            = 'bignyak@bigmir.net'
-  s.homepage         = 'https://github.com/deril/rutracker_api'
-  s.license          = 'MIT'
+Gem::Specification.new do |spec|
+  spec.name          = 'rutracker_api'
+  spec.version       = RutrackerApi::VERSION
+  spec.authors       = ['Dmytro Bihniak']
+  spec.email         = '570757+deril@users.noreply.github.com'
 
-  s.files            = `git ls-files`.split("\n")
-  s.test_files       = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.extra_rdoc_files = ['README.rdoc']
-  s.require_paths    = ['lib']
+  spec.summary       = 'Search API for rutracker.org'
+  spec.description   = 'Provide simple search api for rutracker.org'
+  spec.homepage      = 'https://github.com/deril/rutracker_api'
+  spec.license       = 'MIT'
 
-  s.add_dependency 'mechanize', ['>=2.7.2']
+  if spec.respond_to?(:metadata)
+    spec.metadata['homepage_uri'] = spec.homepage
+    spec.metadata['source_code_uri'] = 'https://github.com/deril/rutracker_api'
+    spec.metadata['changelog_uri'] = 'https://github.com/deril/rutracker_api/blob/master/CHANGELOG.md'
+  else
+    raise 'RubyGems 2.0 or newer is required to protect against public gem pushes.'
+  end
 
-  s.add_development_dependency 'bundler', ['>= 1.0.0']
-  s.add_development_dependency 'rake', ['>= 0']
-  s.add_development_dependency 'rdoc', ['>= 0']
-  s.add_development_dependency 'rspec', ['>= 0']
+  spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
+    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  end
+  spec.bindir        = 'exe'
+  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.require_paths = ['lib']
+
+  spec.add_dependency 'mechanize', '>=2.7.6'
+
+  spec.add_development_dependency 'bundler', '~> 1.17'
+  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rspec', '~> 3.0'
 end
