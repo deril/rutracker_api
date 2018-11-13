@@ -1,17 +1,18 @@
-# -*- coding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'rubygems'
 require 'mechanize'
 
 class RutrackerApi
   attr_accessor :agent
 
-  LOGIN_PAGE = 'http://login.rutracker.org/forum/login.php'
-  SEARCH_PAGE = 'http://rutracker.org/forum/tracker.php'
+  LOGIN_PAGE = 'https://rutracker.org/forum/login.php'.freeze
+  SEARCH_PAGE = 'https://rutracker.org/forum/tracker.php'.freeze
 
-  ORDER_OPTIONS = { date: 1,  name: 2, downloads: 4, shows: 6, seeders: 10,
+  ORDER_OPTIONS = { date: 1, name: 2, downloads: 4, shows: 6, seeders: 10,
                     leechers: 11, size: 7, last_post: 8, speed_up: 12,
-                    speed_down: 13, message_count: 5, last_seed: 9 }
-  SORT_OPTIONS = {asc: 1, desc: 2}
+                    speed_down: 13, message_count: 5, last_seed: 9 }.freeze
+  SORT_OPTIONS = { asc: 1, desc: 2 }.freeze
 
   def initialize(username, pass)
     @agent = Mechanize.new
@@ -21,7 +22,7 @@ class RutrackerApi
 
   # Advance search throw rutracker
   #
-  # @param option [Hash] the format type, `:category`, `:term`, `:sort`, `:order_by`
+  # @param options [Hash] the format type, `:category`, `:term`, `:sort`, `:order_by`
   # @return [Hash] the options keys with search result
   def search(options = {})
     query = prepare_query_string options
@@ -29,46 +30,39 @@ class RutrackerApi
     parse_search
   end
 
-  def find_user(nick)
-    # TODO: add parser for user pages
-    @agent.get 'http://rutracker.org/forum/profile.php?mode=viewprofile&u=' + nick
+  private
+
+  def login(username, pass)
+    @agent.post(LOGIN_PAGE, login_username: username,
+                            login_password: pass, login: 'Вход')
   end
 
-  private
-    def login(username, pass)
-      @agent.post(LOGIN_PAGE, login_username: username,
-                  login_password: pass, login: 'Вход')
-    end
+  def prepare_query_string(options)
+    prepared = { f: options[:category], nm: options[:term],
+                 s: SORT_OPTIONS[options[:sort]], o: ORDER_OPTIONS[options[:order_by]] }
 
-    def prepare_query_string(options)
-      prepared = { f: options[:category], nm: options[:term],
-        s: SORT_OPTIONS[options[:sort]], o: ORDER_OPTIONS[options[:order_by]] }
+    StringIO.new.tap do |q|
+      q << "#{SEARCH_PAGE}?"
+      q << "nm=#{prepared[:nm]}" if prepared[:nm]
+      q << "&f=#{prepared[:f]}" if prepared[:f]
+      q << "&o=#{prepared[:o]}" if prepared[:o]
+      q << "&s=#{prepared[:s]}" if prepared[:s]
+    end.string
+  end
 
-      query = SEARCH_PAGE + '?'
-      if prepared[:nm]
-        query.gsub! '&', ''
-        query << "nm=%22#{prepared[:nm]}%22"
-      end
-      query << "&f=#{prepared[:f]}" if prepared[:f]
-      query << "&f=#{prepared[:o]}" if prepared[:order_by]
-      query << "&f=#{prepared[:s]}" if prepared[:sort]
-      query
-    end
-
-    def parse_search
+  def parse_search
     @agent.page.search("//table[@class='forumline tablesorter']/tbody/tr").map do |row|
-      if row.css(".row1").text =~ /Не найдено/
-        return {error: 'Not found'}
-      end
-      description = row.at("td[4]").text.strip
-      torrent_id =  row.at("td[4]//a").attributes['data-topic_id'].text.to_i
-      size = row.at("td[6]/a").text.chomp(" ↓")
-      seeders = row.at("td[7]").text.to_i
-      leechers = row.at("td[8]").text.to_i
-      downloads = row.at("td[9]").text.to_i
-      date = DateTime.strptime(row.at("td[10]/u").text, '%s')
-      author = row.css(".u-name/a").text
-      user_id = row.css(".u-name/a")[0]['href'].scan(/\d+/)[0].to_i
+      return { error: 'Not found' } if row.css('.row1').text =~ /Не найдено/
+
+      description = row.at('td[4]').text.strip
+      torrent_id = row.at('td[4]//a').attributes['data-topic_id'].text.to_i
+      size = row.at('td[6]/a').text.chomp(' ↓')
+      seeders = row.at('td[7]').text.to_i
+      leechers = row.at('td[8]').text.to_i
+      downloads = row.at('td[9]').text.to_i
+      date = Time.strptime(row.at('td[10]/u').text, '%s')
+      author = row.css('.u-name/a').text
+      user_id = row.css('.u-name/a')[0]['href'].scan(/\d+/)[0].to_i
 
       { description: description, torrent_id: torrent_id, size: size,
         seeders: seeders, leechers: leechers, downloads: downloads,
