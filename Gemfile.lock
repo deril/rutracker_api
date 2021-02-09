@@ -32,7 +32,7 @@ GEM
     nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     ntlm-http (0.1.1)
-    rake (10.5.0)
+    rake (13.0.3)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -56,7 +56,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.17)
-  rake (~> 10.0)
+  rake (~> 13.0)
   rspec (~> 3.0)
   rutracker_api!
 
